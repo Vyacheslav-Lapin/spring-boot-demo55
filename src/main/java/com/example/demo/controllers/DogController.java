@@ -16,6 +16,6 @@ public class DogController {
   @GetMapping
   @SneakyThrows
   public Dog getGog() { //jackson
-    return new Dog("Жучка", LocalDate.now());
+    return Dog.builder().name("Жучка").dob(LocalDate.now()).build();
   }
 }

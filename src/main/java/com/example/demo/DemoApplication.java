@@ -3,7 +3,6 @@ package com.example.demo;
 import com.example.demo.dao.CatDao;
 import com.example.demo.model.Cat;
 import java.util.Arrays;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,5 +21,4 @@ public class DemoApplication {
                      .map(Cat::new)
                      .forEach(catDao::save);
   }
-
 }
