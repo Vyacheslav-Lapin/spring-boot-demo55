@@ -21,6 +21,13 @@
     <jcip-annotations.version>1.0</jcip-annotations.version>
     <spotbugs.version>4.0.6</spotbugs.version>
     <error_prone_annotations.version>2.4.0</error_prone_annotations.version>
+
+    <springdoc-openapi.version>1.4.4</springdoc-openapi.version>
+
+    <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+    <checkstyle.version>8.29</checkstyle.version>
+    <sonar-maven-plugin.version>2.7.1</sonar-maven-plugin.version>
+    <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -56,6 +63,19 @@
         <artifactId>error_prone_annotations</artifactId>
         <version>${error_prone_annotations.version}</version>
         <scope>provided</scope>
+      </dependency>
+      <!--endregion-->
+
+      <!--region SpringDoc OpenAPI-->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${springdoc-openapi.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-data-rest</artifactId>
+        <version>${springdoc-openapi.version}</version>
       </dependency>
       <!--endregion-->
 
@@ -121,6 +141,17 @@
     </dependency>
     <!--endregion-->
 
+    <!--region SpringDoc OpenAPI-->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-data-rest</artifactId>
+    </dependency>
+    <!--endregion-->
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -140,6 +171,52 @@
   </dependencies>
 
   <build>
+
+    <defaultGoal>verify spring-boot:run</defaultGoal>
+
+    <pluginManagement>
+      <plugins>
+
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${maven-checkstyle-plugin.version}</version>
+          <configuration><!--http://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html-->
+            <configLocation>google_checks.xml</configLocation>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${sonar-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${versions-maven-plugin.version}</version>
+          <configuration>
+            <generateBackupPoms>false</generateBackupPoms>
+            <!--suppress MybatisMapperXmlInspection, MavenModelInspection -->
+            <rulesUri>file://${maven.multiModuleProjectDirectory}/ruleset.xml</rulesUri>
+          </configuration>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -147,6 +224,18 @@
         <configuration>
           <jvmArguments>--enable-preview</jvmArguments>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
