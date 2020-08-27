@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(authorities = "ADMIN")
-@AllArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 class CatTest {
 
   MockMvc mockMvc;
@@ -32,8 +33,8 @@ class CatTest {
     mockMvc.perform(get("/cats"))
       .andExpect(status().isOk())
       .andExpect(content().contentType(HAL_JSON_VALUE))
-      .andExpect(mvcResult -> assertEquals(4,
+      .andExpect((MvcResult mvcResult) -> assertEquals(4,
           parse(mvcResult.getResponse().getContentAsString())
-              .<Integer>read("$.page.totalElements").intValue()));
+              .<Integer>read("$.page.totalElements")));
   }
 }
